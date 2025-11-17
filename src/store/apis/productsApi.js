@@ -7,6 +7,7 @@
  */
 
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import axios from 'axios';
 
 // Get base URL from environment or use fallback
 const getBaseUrl = () => {
@@ -21,18 +22,33 @@ const getBaseUrl = () => {
 export const productsApi = createApi({
   reducerPath: 'productsApi',
   // Base query with authentication header preparation
-  baseQuery: fetchBaseQuery({
-    baseUrl: getBaseUrl(),
-    prepareHeaders: (headers, { getState }) => {
-      const token = getState().auth.token;
-      if (token) {
-        headers.set('authorization', `Bearer ${token}`);
-      }
-      return headers;
-    },
-    // Increase maxContentLength for large responses
-    maxContentLength: 100000,
-  }),
+  baseQuery: async (args, api, extraOptions) => {
+    const baseUrl = getBaseUrl();
+    const token = api.getState().auth.token;
+
+    try {
+      const response = await axios({
+        method: args.method || 'GET',
+        url: `${baseUrl}${args}`,
+        data: args.body,
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token && { authorization: `Bearer ${token}` }),
+        },
+        maxContentLength: Infinity,
+        maxBodyLength: Infinity,
+      });
+
+      return { data: response.data };
+    } catch (error) {
+      return {
+        error: {
+          status: error.response?.status || 500,
+          data: error.response?.data || error.message,
+        },
+      };
+    }
+  },
   // Tag types for cache invalidation
   tagTypes: ['Products'],
   endpoints: (builder) => ({
