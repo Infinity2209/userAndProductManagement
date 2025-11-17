@@ -181,14 +181,26 @@ npm run dev
 
 #### Troubleshooting Deployment Issues
 
-**404 Errors on API calls:**
-- Verify your JSON server is running and accessible
-- Check that the URL in `netlify.toml` matches your JSON server
-- Ensure CORS is properly configured on your JSON server
+**404 Errors on API calls (like "products:1 Failed to load resource"):**
+- Verify your JSON server is running and accessible at the specified URL
+- Check that the URL in `netlify.toml` matches your JSON server exactly
+- Ensure your JSON server supports the exact endpoints (`/users`, `/products`)
+- Test your JSON server directly by visiting the URL in a browser
 
 **Connection Refused:**
-- Make sure you're using HTTPS URLs in production
-- Verify the JSON server endpoint is correct
+- Make sure you're using HTTPS URLs in production (required by Netlify)
+- Verify the JSON server endpoint is correct and publicly accessible
+- Check if your JSON server requires authentication or has CORS restrictions
+
+**CORS Issues:**
+- Configure your JSON server to allow requests from your Netlify domain
+- Add CORS headers to your JSON server configuration
+- Example for JSON Server: add `"--host 0.0.0.0 --cors"` to your start command
+
+**Redirect Not Working:**
+- Ensure `netlify.toml` is in the root directory
+- Check that the redirect patterns match your API calls exactly
+- Verify the JSON server URL doesn't have trailing slashes
 
 ## 🔐 Authentication
 

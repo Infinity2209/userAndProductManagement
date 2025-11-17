@@ -4,8 +4,18 @@
 
 # Redirect API calls to your JSON server
 [[redirects]]
+  from = "/users"
+  to = "https://your-json-server-endpoint.herokuapp.com/users"
+  status = 200
+
+[[redirects]]
   from = "/users/*"
   to = "https://your-json-server-endpoint.herokuapp.com/users/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/products"
+  to = "https://your-json-server-endpoint.herokuapp.com/products"
   status = 200
 
 [[redirects]]
