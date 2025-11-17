@@ -12,7 +12,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 const getBaseUrl = () => {
   // For production (Netlify), use My JSON Server
   if (import.meta.env.PROD) {
-    return 'https://my-json-server.typicode.com/Infinity2209/userAndProductManagement';
+    return 'https://my-json-server.typicode.com/Infinity2209/user';
   }
   // For development, use localhost
   return 'http://localhost:3001';
@@ -30,6 +30,8 @@ export const usersApi = createApi({
       }
       return headers;
     },
+    // Increase maxContentLength for large responses
+    maxContentLength: 100000,
   }),
   // Tag types for cache invalidation
   tagTypes: ['Users'],
